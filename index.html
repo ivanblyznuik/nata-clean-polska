@@ -2,8 +2,11 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#00a77b">
   <title>NATA Clean Polska</title>
+
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
   <style>
     * {
@@ -12,752 +15,1463 @@
       padding: 0;
     }
 
+    :root {
+      --green: #00a77b;
+      --green-dark: #008d68;
+      --green-soft: #eaf8f4;
+      --text: #17202a;
+      --muted: #6b7280;
+      --bg: #f5f6f7;
+      --white: #ffffff;
+      --border: #e7e7e7;
+      --danger: #d64545;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      background: #f5f6f7;
-      color: #17202a;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding-bottom: 92px;
+    }
+
+    button {
+      font: inherit;
     }
 
     .app {
-      max-width: 500px;
-      margin: auto;
+      max-width: 600px;
+      margin: 0 auto;
       min-height: 100vh;
-      background: white;
+      background: var(--bg);
     }
 
-    .header {
-      background: #009b72;
-      color: white;
-      padding: 18px 20px;
-      text-align: center;
-      font-size: 24px;
-      font-weight: 600;
-    }
+    /* LANGUAGE SCREEN */
 
-    .hero {
-      background: linear-gradient(135deg, #009b72, #007c5c);
-      color: white;
-      padding: 35px 24px;
-    }
-
-    .hero h1 {
-      font-size: 30px;
-      margin-bottom: 10px;
-    }
-
-    .hero p {
-      opacity: 0.9;
-      line-height: 1.5;
-    }
-
-    .section {
-      padding: 22px 18px;
-    }
-
-    .section h2 {
-      font-size: 22px;
-      margin-bottom: 18px;
-    }
-
-    .categories {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-    }
-
-    .category {
-      background: #f4f7f6;
-      border-radius: 16px;
-      padding: 18px 8px;
-      text-align: center;
-      cursor: pointer;
-      min-height: 105px;
-    }
-
-    .category span {
-      display: block;
-      font-size: 31px;
-      margin-bottom: 8px;
-    }
-
-    .category p {
-      font-size: 13px;
-      font-weight: 600;
-    }
-
-    .language-screen {
+    #languageScreen {
       position: fixed;
       inset: 0;
-      background: #009b72;
-      color: white;
+      background: var(--green);
+      z-index: 9999;
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 100;
-      padding: 25px;
+      padding: 28px;
     }
 
-    .language-box {
+    .language-inner {
       width: 100%;
-      max-width: 420px;
+      max-width: 520px;
       text-align: center;
+      color: white;
     }
 
-    .brand {
+    .brand-small {
+      font-size: 26px;
+      font-weight: 400;
+      margin-bottom: 34px;
+      letter-spacing: .5px;
+    }
+
+    .welcome {
       font-size: 38px;
-      font-weight: 300;
+      line-height: 1.05;
+      font-weight: 800;
+      margin-bottom: 18px;
+    }
+
+    .welcome-sub {
+      font-size: 20px;
+      line-height: 1.35;
+      opacity: .95;
+      margin-bottom: 42px;
+    }
+
+    .language-button {
+      width: 100%;
+      border: none;
+      background: white;
+      color: var(--text);
+      border-radius: 22px;
+      padding: 22px 18px;
+      margin-bottom: 16px;
+      font-size: 24px;
+      font-weight: 750;
+      cursor: pointer;
+    }
+
+    /* HEADER */
+
+    .topbar {
+      background: var(--green);
+      color: white;
+      padding: 24px 22px 18px;
+      text-align: center;
+      font-size: 28px;
+      font-weight: 850;
+      letter-spacing: .4px;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    /* HERO */
+
+    .hero {
+      background: linear-gradient(135deg, var(--green), var(--green-dark));
+      color: white;
+      padding: 38px 28px 42px;
+    }
+
+    .hero h1 {
+      font-size: 38px;
+      line-height: 1.05;
       margin-bottom: 15px;
     }
 
-    .language-box h1 {
+    .hero p {
+      font-size: 19px;
+      line-height: 1.45;
+      opacity: .96;
+    }
+
+    /* CONTENT */
+
+    .section {
+      padding: 28px 20px;
+    }
+
+    .section-title {
+      font-size: 29px;
+      font-weight: 850;
       margin-bottom: 8px;
     }
 
-    .language-box p {
-      margin-bottom: 30px;
-      opacity: 0.9;
+    .section-subtitle {
+      color: var(--muted);
+      line-height: 1.4;
+      margin-bottom: 22px;
     }
 
-    .lang-button {
-      width: 100%;
+    .products {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .product-card {
       background: white;
-      color: #17202a;
-      border: none;
-      padding: 17px;
-      margin: 7px 0;
-      border-radius: 14px;
-      font-size: 17px;
-      font-weight: 600;
+      border-radius: 22px;
+      padding: 18px;
+      box-shadow: 0 5px 18px rgba(0,0,0,.05);
       cursor: pointer;
-    }
-
-    .product {
+      min-height: 245px;
       display: flex;
-      align-items: center;
-      background: #f7f8f8;
-      border-radius: 15px;
-      padding: 14px;
-      margin-bottom: 12px;
+      flex-direction: column;
     }
 
     .product-icon {
-      font-size: 40px;
-      width: 60px;
-      text-align: center;
+      height: 94px;
+      border-radius: 18px;
+      background: var(--green-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 52px;
+      margin-bottom: 16px;
     }
 
-    .product-info {
+    .product-name {
+      font-size: 18px;
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 9px;
+    }
+
+    .product-short {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.35;
       flex: 1;
     }
 
-    .product-info h3 {
-      font-size: 16px;
-      margin-bottom: 5px;
+    .from-price {
+      margin-top: 14px;
+      color: var(--green-dark);
+      font-weight: 850;
+      font-size: 17px;
     }
 
-    .product-info p {
-      font-size: 13px;
-      color: #6b7378;
+    /* PRODUCT DETAIL */
+
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .detail {
+      padding: 20px;
+    }
+
+    .back-btn {
+      border: none;
+      background: transparent;
+      color: var(--green-dark);
+      font-size: 17px;
+      font-weight: 750;
+      padding: 8px 0 18px;
+      cursor: pointer;
+    }
+
+    .detail-card {
+      background: white;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 5px 20px rgba(0,0,0,.05);
+    }
+
+    .detail-image {
+      height: 240px;
+      background: var(--green-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 105px;
+    }
+
+    .detail-content {
+      padding: 22px;
+    }
+
+    .detail-title {
+      font-size: 27px;
+      line-height: 1.15;
+      font-weight: 850;
+      margin-bottom: 12px;
+    }
+
+    .detail-description {
+      color: #4b5563;
+      font-size: 16px;
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+
+    .label {
+      font-size: 15px;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .volume-options {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 9px;
+      margin-bottom: 20px;
+    }
+
+    .volume-btn {
+      border: 2px solid var(--border);
+      background: white;
+      border-radius: 14px;
+      padding: 13px 5px;
+      cursor: pointer;
+      font-weight: 800;
+    }
+
+    .volume-btn.selected {
+      border-color: var(--green);
+      background: var(--green-soft);
+      color: var(--green-dark);
+    }
+
+    .price-box {
+      background: #f7f8f8;
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 20px;
     }
 
     .price {
-      font-weight: bold;
-      color: #009b72;
-      margin-top: 6px;
+      font-size: 26px;
+      font-weight: 900;
     }
 
-    .cart-button {
-      border: none;
-      background: #009b72;
-      color: white;
+    .price-note {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 5px;
+    }
+
+    .qty-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .qty-controls {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .qty-btn {
       width: 42px;
       height: 42px;
-      border-radius: 12px;
+      border: none;
+      border-radius: 50%;
+      background: var(--green-soft);
+      color: var(--green-dark);
+      font-size: 25px;
+      font-weight: 800;
       cursor: pointer;
+    }
+
+    .qty-value {
       font-size: 20px;
+      font-weight: 850;
+      min-width: 22px;
+      text-align: center;
     }
 
-    .bottom-space {
-      height: 80px;
+    .primary-btn {
+      width: 100%;
+      border: none;
+      border-radius: 17px;
+      background: var(--green);
+      color: white;
+      padding: 17px;
+      font-size: 18px;
+      font-weight: 850;
+      cursor: pointer;
     }
 
-    .navigation {
+    .primary-btn:active {
+      transform: scale(.99);
+    }
+
+    /* CART */
+
+    .cart-wrap {
+      padding: 22px 20px;
+    }
+
+    .cart-empty {
+      background: white;
+      border-radius: 22px;
+      padding: 45px 20px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    .cart-empty-icon {
+      font-size: 58px;
+      margin-bottom: 14px;
+    }
+
+    .cart-item {
+      background: white;
+      border-radius: 19px;
+      padding: 16px;
+      margin-bottom: 12px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .cart-item-icon {
+      width: 62px;
+      height: 62px;
+      flex: 0 0 62px;
+      border-radius: 16px;
+      background: var(--green-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 31px;
+    }
+
+    .cart-item-main {
+      flex: 1;
+    }
+
+    .cart-item-name {
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 5px;
+    }
+
+    .cart-item-meta {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .cart-item-price {
+      font-weight: 850;
+      margin-top: 5px;
+    }
+
+    .remove-btn {
+      border: none;
+      background: transparent;
+      color: var(--danger);
+      font-size: 22px;
+      cursor: pointer;
+    }
+
+    .cart-total {
+      background: white;
+      border-radius: 22px;
+      padding: 20px;
+      margin-top: 18px;
+    }
+
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 22px;
+      font-weight: 900;
+      margin-bottom: 17px;
+    }
+
+    .unpriced-warning {
+      background: #fff8e6;
+      color: #7a5a00;
+      border-radius: 14px;
+      padding: 12px;
+      font-size: 13px;
+      line-height: 1.4;
+      margin-bottom: 15px;
+    }
+
+    /* MORE */
+
+    .more-list {
+      padding: 20px;
+    }
+
+    .more-card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+
+    .more-row {
+      width: 100%;
+      border: none;
+      background: white;
+      padding: 19px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      text-align: left;
+      font-size: 17px;
+      font-weight: 700;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+    }
+
+    .more-row:last-child {
+      border-bottom: none;
+    }
+
+    /* CHECKOUT */
+
+    .checkout-form {
+      padding: 20px;
+    }
+
+    .form-card {
+      background: white;
+      border-radius: 22px;
+      padding: 20px;
+    }
+
+    .field {
+      margin-bottom: 16px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 14px;
+      font-weight: 800;
+      margin-bottom: 7px;
+    }
+
+    .field input,
+    .field textarea,
+    .field select {
+      width: 100%;
+      border: 1.5px solid #dedede;
+      border-radius: 14px;
+      padding: 14px;
+      font: inherit;
+      outline: none;
+      background: white;
+    }
+
+    .field textarea {
+      resize: vertical;
+      min-height: 85px;
+    }
+
+    .checkout-info {
+      background: var(--green-soft);
+      color: #17624f;
+      padding: 14px;
+      border-radius: 14px;
+      font-size: 14px;
+      line-height: 1.4;
+      margin-bottom: 18px;
+    }
+
+    /* SUCCESS */
+
+    .success {
+      padding: 60px 24px;
+      text-align: center;
+    }
+
+    .success-icon {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: var(--green);
+      color: white;
+      margin: 0 auto 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+    }
+
+    .success h2 {
+      font-size: 30px;
+      margin-bottom: 12px;
+    }
+
+    .success p {
+      color: var(--muted);
+      line-height: 1.5;
+      margin-bottom: 25px;
+    }
+
+    /* BOTTOM NAV */
+
+    .bottom-nav {
       position: fixed;
-      bottom: 0;
       left: 50%;
       transform: translateX(-50%);
-      max-width: 500px;
+      bottom: 0;
       width: 100%;
-      background: white;
+      max-width: 600px;
+      height: 78px;
+      background: rgba(255,255,255,.97);
       border-top: 1px solid #e5e5e5;
-      display: flex;
-      justify-content: space-around;
-      padding: 11px 5px 15px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      z-index: 100;
+      padding-bottom: env(safe-area-inset-bottom);
     }
 
-    .nav-item {
-      text-align: center;
-      font-size: 11px;
-      color: #596167;
+    .nav-btn {
+      border: none;
+      background: transparent;
+      color: #6b7280;
+      cursor: pointer;
+      position: relative;
+      font-size: 12px;
+      font-weight: 650;
+    }
+
+    .nav-btn.active {
+      color: var(--green);
     }
 
     .nav-icon {
-      font-size: 22px;
       display: block;
+      font-size: 24px;
       margin-bottom: 3px;
     }
 
-    .active {
-      color: #009b72;
+    .cart-badge {
+      position: absolute;
+      top: 7px;
+      left: calc(50% + 8px);
+      min-width: 20px;
+      height: 20px;
+      padding: 0 5px;
+      border-radius: 10px;
+      background: #ef4444;
+      color: white;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    @media (max-width: 390px) {
+      .products {
+        grid-template-columns: 1fr;
+      }
+
+      .product-card {
+        min-height: 210px;
+      }
+
+      .welcome {
+        font-size: 34px;
+      }
     }
   </style>
 </head>
 
 <body>
 
-  <!-- ВЫБОР ЯЗЫКА -->
-
-  <div class="language-screen" id="languageScreen">
-
-    <div class="language-box">
-
-      <div class="brand">nata group</div>
-
-      <h1>Witamy w NATA Clean!</h1>
-
-      <p>
-        Profesjonalna chemia gospodarcza dla domu i biznesu
-      </p>
-
-      <button class="lang-button" onclick="chooseLanguage('pl')">
-        🇵🇱 Polski
-      </button>
-
-      <button class="lang-button" onclick="chooseLanguage('ua')">
-        🇺🇦 Українська
-      </button>
-
-      <button class="lang-button" onclick="chooseLanguage('ru')">
-        🇷🇺 Русский
-      </button>
-
+<div id="languageScreen">
+  <div class="language-inner">
+    <div class="brand-small">nata group</div>
+    <div class="welcome">Witamy w NATA Clean!</div>
+    <div class="welcome-sub">
+      Profesjonalna chemia gospodarcza dla domu i biznesu
     </div>
 
+    <button class="language-button" onclick="setLanguage('pl')">🇵🇱 Polski</button>
+    <button class="language-button" onclick="setLanguage('ua')">🇺🇦 Українська</button>
+    <button class="language-button" onclick="setLanguage('ru')">🇷🇺 Русский</button>
   </div>
+</div>
 
+<div class="app">
 
-  <!-- ПРИЛОЖЕНИЕ -->
+  <div class="topbar">NATA GROUP</div>
 
-  <div class="app">
-
-    <div class="header">
-      NATA GROUP
-    </div>
-
-
-    <!-- ГЛАВНЫЙ БАННЕР -->
+  <!-- HOME -->
+  <section id="homePage" class="page active">
 
     <div class="hero">
-
       <h1>NATA Clean</h1>
+      <p id="heroText">Profesjonalna chemia gospodarcza dla domu i biznesu</p>
+    </div>
 
-      <p id="heroText">
-        Profesjonalne środki czystości dla domu i biznesu
+    <div class="section">
+      <div class="section-title" id="productsTitle">Produkty</div>
+      <div class="section-subtitle" id="productsSubtitle">
+        4 profesjonalne produkty NATA Clean
+      </div>
+
+      <div id="productGrid" class="products"></div>
+    </div>
+
+  </section>
+
+  <!-- PRODUCT -->
+  <section id="productPage" class="page">
+    <div class="detail">
+
+      <button class="back-btn" onclick="showPage('home')">
+        ← <span id="backText">Wróć</span>
+      </button>
+
+      <div class="detail-card">
+        <div id="detailIcon" class="detail-image">🧴</div>
+
+        <div class="detail-content">
+          <div id="detailTitle" class="detail-title"></div>
+          <div id="detailDescription" class="detail-description"></div>
+
+          <div class="label" id="volumeLabel">Wybierz pojemność</div>
+          <div id="volumeOptions" class="volume-options"></div>
+
+          <div class="price-box">
+            <div id="detailPrice" class="price"></div>
+            <div id="priceNote" class="price-note">
+              Cena zgodna z aktualną ofertą NATA GROUP
+            </div>
+          </div>
+
+          <div class="qty-row">
+            <div class="label" id="quantityLabel">Ilość</div>
+
+            <div class="qty-controls">
+              <button class="qty-btn" onclick="changeProductQty(-1)">−</button>
+              <span id="productQty" class="qty-value">1</span>
+              <button class="qty-btn" onclick="changeProductQty(1)">+</button>
+            </div>
+          </div>
+
+          <button id="addCartButton" class="primary-btn" onclick="addToCart()">
+            Dodaj do koszyka
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CART -->
+  <section id="cartPage" class="page">
+    <div class="cart-wrap">
+      <div class="section-title" id="cartTitle">Koszyk</div>
+      <div id="cartContent"></div>
+    </div>
+  </section>
+
+  <!-- MORE -->
+  <section id="morePage" class="page">
+    <div class="section">
+      <div class="section-title" id="moreTitle">Więcej</div>
+    </div>
+
+    <div class="more-list">
+      <div class="more-card">
+        <button class="more-row" onclick="changeLanguage()">
+          🌐 <span id="changeLanguageText">Zmień język</span>
+        </button>
+
+        <button class="more-row" onclick="showInfo('delivery')">
+          🚚 <span id="deliveryText">Dostawa</span>
+        </button>
+
+        <button class="more-row" onclick="showInfo('payment')">
+          💳 <span id="paymentText">Płatność</span>
+        </button>
+
+        <button class="more-row" onclick="showInfo('company')">
+          🏢 <span id="companyText">O NATA GROUP</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHECKOUT -->
+  <section id="checkoutPage" class="page">
+    <div class="checkout-form">
+
+      <button class="back-btn" onclick="showPage('cart')">
+        ← <span id="checkoutBackText">Wróć do koszyka</span>
+      </button>
+
+      <div class="section-title" id="checkoutTitle">Złóż zamówienie</div>
+
+      <div class="form-card">
+
+        <div id="checkoutInfo" class="checkout-info">
+          Po wysłaniu zamówienia menedżer skontaktuje się z Tobą w celu potwierdzenia dostawy i płatności.
+        </div>
+
+        <div class="field">
+          <label id="nameLabel">Imię</label>
+          <input id="customerName" type="text" autocomplete="name">
+        </div>
+
+        <div class="field">
+          <label id="phoneLabel">Telefon</label>
+          <input id="customerPhone" type="tel" autocomplete="tel">
+        </div>
+
+        <div class="field">
+          <label id="cityLabel">Miasto</label>
+          <input id="customerCity" type="text">
+        </div>
+
+        <div class="field">
+          <label id="deliveryLabel">Sposób dostawy</label>
+          <select id="deliveryMethod"></select>
+        </div>
+
+        <div class="field">
+          <label id="addressLabel">Adres / dane do wysyłki</label>
+          <input id="customerAddress" type="text">
+        </div>
+
+        <div class="field">
+          <label id="commentLabel">Komentarz</label>
+          <textarea id="customerComment"></textarea>
+        </div>
+
+        <button id="confirmOrderButton" class="primary-btn" onclick="submitOrder()">
+          Potwierdź zamówienie
+        </button>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SUCCESS -->
+  <section id="successPage" class="page">
+    <div class="success">
+      <div class="success-icon">✓</div>
+      <h2 id="successTitle">Dziękujemy!</h2>
+      <p id="successText">
+        Zamówienie zostało przygotowane. Menedżer NATA Clean skontaktuje się z Tobą w sprawie płatności i dostawy.
       </p>
 
+      <button id="successHomeButton" class="primary-btn" onclick="finishOrder()">
+        Wróć do sklepu
+      </button>
     </div>
-
-
-    <!-- КАТЕГОРИИ -->
-
-    <div class="section">
-
-      <h2 id="categoriesTitle">
-        Kategorie
-      </h2>
-
-      <div class="categories">
-
-        <div class="category">
-          <span>🍳</span>
-          <p id="catKitchen">
-            Kuchnia i tłuszcz
-          </p>
-        </div>
-
-
-        <div class="category">
-          <span>🚿</span>
-          <p id="catBathroom">
-            Łazienka
-          </p>
-        </div>
-
-
-        <div class="category">
-          <span>🚽</span>
-          <p id="catToilet">
-            Toaleta
-          </p>
-        </div>
-
-
-        <div class="category">
-          <span>🪟</span>
-          <p id="catGlass">
-            Szkło i lustra
-          </p>
-        </div>
-
-
-        <div class="category">
-          <span>🧹</span>
-          <p id="catFloor">
-            Podłogi
-          </p>
-        </div>
-
-
-        <div class="category">
-          <span>✨</span>
-          <p id="catUniversal">
-            Uniwersalne
-          </p>
-        </div>
-
-
-        <div class="category">
-          <span>🍽️</span>
-          <p id="catDishes">
-            Naczynia
-          </p>
-        </div>
-
-
-        <div class="category">
-          <span>🧺</span>
-          <p id="catLaundry">
-            Pranie
-          </p>
-        </div>
-
-
-        <div class="category">
-          <span>🌸</span>
-          <p id="catSoftener">
-            Kondycjonery
-          </p>
-        </div>
-
-      </div>
-
-    </div>
-
-
-    <!-- ПОПУЛЯРНЫЕ ТОВАРЫ -->
-
-    <div class="section">
-
-      <h2 id="popularTitle">
-        Popularne produkty
-      </h2>
-
-
-      <div class="product">
-
-        <div class="product-icon">
-          🧴
-        </div>
-
-        <div class="product-info">
-
-          <h3>
-            NATA Clean Kitchen
-          </h3>
-
-          <p>
-            Środek do usuwania tłuszczu
-          </p>
-
-          <div class="price">
-            12,90 zł
-          </div>
-
-        </div>
-
-        <button class="cart-button">
-          +
-        </button>
-
-      </div>
-
-
-      <div class="product">
-
-        <div class="product-icon">
-          🧴
-        </div>
-
-        <div class="product-info">
-
-          <h3>
-            NATA Clean Bathroom
-          </h3>
-
-          <p>
-            Środek do łazienki
-          </p>
-
-          <div class="price">
-            11,90 zł
-          </div>
-
-        </div>
-
-        <button class="cart-button">
-          +
-        </button>
-
-      </div>
-
-
-      <div class="product">
-
-        <div class="product-icon">
-          🧴
-        </div>
-
-        <div class="product-info">
-
-          <h3>
-            NATA Clean Glass
-          </h3>
-
-          <p>
-            Płyn do szyb i luster
-          </p>
-
-          <div class="price">
-            9,90 zł
-          </div>
-
-        </div>
-
-        <button class="cart-button">
-          +
-        </button>
-
-      </div>
-
-    </div>
-
-
-    <div class="bottom-space"></div>
-
-  </div>
-
-
-  <!-- НИЖНЕЕ МЕНЮ -->
-
-  <div class="navigation">
-
-    <div class="nav-item active">
-
-      <span class="nav-icon">
-        🏠
-      </span>
-
-      <span id="navHome">
-        Główna
-      </span>
-
-    </div>
-
-
-    <div class="nav-item">
-
-      <span class="nav-icon">
-        ▦
-      </span>
-
-      <span id="navCatalog">
-        Katalog
-      </span>
-
-    </div>
-
-
-    <div class="nav-item">
-
-      <span class="nav-icon">
-        🛒
-      </span>
-
-      <span id="navCart">
-        Koszyk
-      </span>
-
-    </div>
-
-
-    <div class="nav-item">
-
-      <span class="nav-icon">
-        •••
-      </span>
-
-      <span id="navMore">
-        Więcej
-      </span>
-
-    </div>
-
-  </div>
-
-
-  <script>
-
-    const translations = {
-
-      pl: {
-
-        hero:
-          "Profesjonalne środki czystości dla domu i biznesu",
-
-        categories:
-          "Kategorie",
-
-        kitchen:
-          "Kuchnia i tłuszcz",
-
-        bathroom:
-          "Łazienka",
-
-        toilet:
-          "Toaleta",
-
-        glass:
-          "Szkło i lustra",
-
-        floor:
-          "Podłogi",
-
-        universal:
-          "Uniwersalne",
-
-        dishes:
-          "Naczynia",
-
-        laundry:
-          "Pranie",
-
-        softener:
-          "Kondycjonery",
-
-        popular:
-          "Popularne produkty",
-
-        home:
-          "Główna",
-
-        catalog:
-          "Katalog",
-
-        cart:
-          "Koszyk",
-
-        more:
-          "Więcej"
+  </section>
+
+</div>
+
+<!-- NAV -->
+<nav class="bottom-nav" id="bottomNav">
+
+  <button class="nav-btn active" id="navHome" onclick="showPage('home')">
+    <span class="nav-icon">🏠</span>
+    <span id="navHomeText">Główna</span>
+  </button>
+
+  <button class="nav-btn" id="navCatalog" onclick="showPage('home')">
+    <span class="nav-icon">▦</span>
+    <span id="navCatalogText">Katalog</span>
+  </button>
+
+  <button class="nav-btn" id="navCart" onclick="showPage('cart')">
+    <span class="nav-icon">🛒</span>
+    <span id="cartBadge" class="cart-badge">0</span>
+    <span id="navCartText">Koszyk</span>
+  </button>
+
+  <button class="nav-btn" id="navMore" onclick="showPage('more')">
+    <span class="nav-icon">•••</span>
+    <span id="navMoreText">Więcej</span>
+  </button>
+
+</nav>
+
+<script>
+  // Telegram Mini App
+  if (window.Telegram && Telegram.WebApp) {
+    Telegram.WebApp.ready();
+    Telegram.WebApp.expand();
+  }
+
+  let language = localStorage.getItem("nataLanguage") || "pl";
+  let cart = JSON.parse(localStorage.getItem("nataCart") || "[]");
+
+  let currentProductId = null;
+  let currentVolume = "0.5";
+  let currentQty = 1;
+
+  /*
+    ЦЕНЫ:
+    null = цена пока не подтверждена на официальном сайте.
+    Неподтвержденную цену мы НЕ придумываем.
+  */
+
+  const products = [
+    {
+      id: "degreaser",
+      icon: "🍳",
+      prices: {
+        "0.5": 118,
+        "1": 159,
+        "5": 556
       },
-
-
-      ua: {
-
-        hero:
-          "Професійна побутова хімія для дому та бізнесу",
-
-        categories:
-          "Категорії",
-
-        kitchen:
-          "Кухня та жир",
-
-        bathroom:
-          "Ванна кімната",
-
-        toilet:
-          "Туалет",
-
-        glass:
-          "Скло та дзеркала",
-
-        floor:
-          "Підлога",
-
-        universal:
-          "Універсальні",
-
-        dishes:
-          "Посуд",
-
-        laundry:
-          "Прання",
-
-        softener:
-          "Кондиціонери",
-
-        popular:
-          "Популярні товари",
-
-        home:
-          "Головна",
-
-        catalog:
-          "Каталог",
-
-        cart:
-          "Кошик",
-
-        more:
-          "Більше"
+      name: {
+        pl: "NATA Clean Antytłuszcz",
+        ua: "NATA Clean Антижир",
+        ru: "NATA Clean Антижир"
       },
-
-
-      ru: {
-
-        hero:
-          "Профессиональная бытовая химия для дома и бизнеса",
-
-        categories:
-          "Категории",
-
-        kitchen:
-          "Кухня и жир",
-
-        bathroom:
-          "Ванная",
-
-        toilet:
-          "Туалет",
-
-        glass:
-          "Стекло и зеркала",
-
-        floor:
-          "Полы",
-
-        universal:
-          "Универсальные",
-
-        dishes:
-          "Посуда",
-
-        laundry:
-          "Стирка",
-
-        softener:
-          "Кондиционеры",
-
-        popular:
-          "Популярные товары",
-
-        home:
-          "Главная",
-
-        catalog:
-          "Каталог",
-
-        cart:
-          "Корзина",
-
-        more:
-          "Еще"
+      short: {
+        pl: "Stary tłuszcz i przypalenia",
+        ua: "Застарілий жир та нагар",
+        ru: "Застарелый жир и нагар"
+      },
+      description: {
+        pl: "Profesjonalny środek do głębokiego czyszczenia powierzchni kuchennych, płyt, piekarników, okapów, grilli i innych powierzchni z uporczywego tłuszczu oraz przypaleń.",
+        ua: "Професійний засіб для глибокого очищення кухонних поверхонь, плит, духових шаф, витяжок і грилів від застарілого жиру, нагару та пригорілих залишків.",
+        ru: "Профессиональное средство для глубокой очистки кухонных поверхностей, плит, духовок, вытяжек и грилей от застарелого жира, нагара и пригоревших загрязнений."
       }
+    },
 
-    };
+    {
+      id: "glass",
+      icon: "🪟",
+      prices: {
+        "0.5": 88,
+        "1": null,
+        "5": null
+      },
+      name: {
+        pl: "NATA Clean Szkło i lustra",
+        ua: "NATA Clean Скло та дзеркала",
+        ru: "NATA Clean Стекло и зеркала"
+      },
+      short: {
+        pl: "Czystość bez smug",
+        ua: "Чистота без розводів",
+        ru: "Чистота без разводов"
+      },
+      description: {
+        pl: "Skuteczny środek do pielęgnacji szkła i luster. Zapewnia przejrzystość bez smug i osadu oraz pomaga ograniczyć ponowne osiadanie kurzu.",
+        ua: "Ефективний засіб для догляду за скляними та дзеркальними поверхнями. Забезпечує чистоту без розводів і плівки та має антистатичний ефект.",
+        ru: "Эффективное средство для ухода за стеклянными и зеркальными поверхностями. Обеспечивает чистоту без разводов и плёнки и обладает антистатическим эффектом."
+      }
+    },
 
+    {
+      id: "bathroom",
+      icon: "🚿",
+      prices: {
+        "0.5": 91,
+        "1": null,
+        "5": 291
+      },
+      name: {
+        pl: "NATA Clean Łazienka",
+        ua: "NATA Clean Ванна кімната",
+        ru: "NATA Clean Ванная"
+      },
+      short: {
+        pl: "Kamień, osad i ślady wody",
+        ua: "Наліт, розводи та плями води",
+        ru: "Налёт, разводы и пятна воды"
+      },
+      description: {
+        pl: "Specjalistyczny środek do czyszczenia łazienki. Usuwa kamień, osad z mydła i ślady wody z ceramiki, szkła, chromu, tworzyw sztucznych i akrylu.",
+        ua: "Спеціалізований засіб для ванної кімнати. Видаляє вапняний наліт, мильні розводи та водяні плями з кераміки, скла, хрому, пластику й акрилу.",
+        ru: "Специализированное средство для ванной комнаты. Удаляет известковый налёт, мыльные разводы и пятна воды с керамики, стекла, хрома, пластика и акрила."
+      }
+    },
 
-    function chooseLanguage(lang) {
+    {
+      id: "pipes",
+      icon: "🚰",
+      prices: {
+        "0.5": null,
+        "1": 139,
+        "5": 592
+      },
+      name: {
+        pl: "NATA Clean Rury",
+        ua: "NATA Clean Трубопроводи",
+        ru: "NATA Clean Трубопровод"
+      },
+      short: {
+        pl: "Do rur i kanalizacji",
+        ua: "Для труб та каналізації",
+        ru: "Для труб и канализации"
+      },
+      description: {
+        pl: "Skuteczny preparat do czyszczenia rur, pionów i instalacji kanalizacyjnych. Pomaga usuwać tłuszcz, pozostałości organiczne, osady oraz źródła nieprzyjemnych zapachów.",
+        ua: "Ефективний засіб для очищення труб, стояків і каналізаційних систем від жирових відкладень, органічних залишків, нальоту та джерел неприємного запаху.",
+        ru: "Эффективное средство для очистки труб, стояков и канализационных систем от жировых отложений, органических остатков, налёта и источников неприятного запаха."
+      }
+    }
+  ];
 
-      const t = translations[lang];
+  const t = {
+    pl: {
+      hero: "Profesjonalna chemia gospodarcza dla domu i biznesu",
+      products: "Produkty",
+      productsSub: "4 profesjonalne produkty NATA Clean",
+      from: "od",
+      currency: "UAH",
+      priceUnknown: "Cena do potwierdzenia",
+      back: "Wróć",
+      volume: "Wybierz pojemność",
+      quantity: "Ilość",
+      add: "Dodaj do koszyka",
+      priceNote: "Cena zgodna z aktualną ofertą NATA GROUP",
+      cart: "Koszyk",
+      empty: "Twój koszyk jest pusty",
+      total: "Razem",
+      checkout: "Złóż zamówienie",
+      unknownWarning: "W koszyku znajduje się wariant bez potwierdzonej ceny. Menedżer potwierdzi jego cenę przed płatnością.",
+      home: "Główna",
+      catalog: "Katalog",
+      more: "Więcej",
+      changeLanguage: "Zmień język",
+      delivery: "Dostawa",
+      payment: "Płatność",
+      company: "O NATA GROUP",
+      checkoutBack: "Wróć do koszyka",
+      checkoutTitle: "Złóż zamówienie",
+      checkoutInfo: "Po wysłaniu zamówienia menedżer skontaktuje się z Tobą w celu potwierdzenia dostawy i płatności.",
+      name: "Imię",
+      phone: "Telefon",
+      city: "Miasto",
+      deliveryMethod: "Sposób dostawy",
+      address: "Adres / dane do wysyłki",
+      comment: "Komentarz",
+      confirm: "Potwierdź zamówienie",
+      deliveryWarsaw: "Dostawa w Warszawie",
+      deliveryPoland: "Dostawa na terenie Polski",
+      required: "Wpisz imię i numer telefonu.",
+      successTitle: "Dziękujemy!",
+      successText: "Zamówienie zostało przygotowane. Menedżer NATA Clean skontaktuje się z Tobą w sprawie płatności i dostawy.",
+      backShop: "Wróć do sklepu",
+      deliveryInfo: "Dostawa w Warszawie i na terenie całej Polski. Szczegóły i koszt dostawy potwierdzi menedżer.",
+      paymentInfo: "Płatność jest uzgadniana z menedżerem po potwierdzeniu zamówienia.",
+      companyInfo: "NATA GROUP — producent profesjonalnej chemii gospodarczej NATA Clean.",
+      added: "Dodano do koszyka"
+    },
 
+    ua: {
+      hero: "Професійна побутова хімія для дому та бізнесу",
+      products: "Товари",
+      productsSub: "4 професійні засоби NATA Clean",
+      from: "від",
+      currency: "грн",
+      priceUnknown: "Ціну буде уточнено",
+      back: "Назад",
+      volume: "Оберіть об'єм",
+      quantity: "Кількість",
+      add: "Додати до кошика",
+      priceNote: "Ціна згідно з актуальною пропозицією NATA GROUP",
+      cart: "Кошик",
+      empty: "Ваш кошик порожній",
+      total: "Разом",
+      checkout: "Оформити замовлення",
+      unknownWarning: "У кошику є варіант без підтвердженої ціни. Менеджер підтвердить її перед оплатою.",
+      home: "Головна",
+      catalog: "Каталог",
+      more: "Ще",
+      changeLanguage: "Змінити мову",
+      delivery: "Доставка",
+      payment: "Оплата",
+      company: "Про NATA GROUP",
+      checkoutBack: "Назад до кошика",
+      checkoutTitle: "Оформити замовлення",
+      checkoutInfo: "Після оформлення менеджер зв'яжеться з вами для підтвердження доставки та оплати.",
+      name: "Ім'я",
+      phone: "Телефон",
+      city: "Місто",
+      deliveryMethod: "Спосіб доставки",
+      address: "Адреса / дані для відправлення",
+      comment: "Коментар",
+      confirm: "Підтвердити замовлення",
+      deliveryWarsaw: "Доставка у Варшаві",
+      deliveryPoland: "Доставка по Польщі",
+      required: "Вкажіть ім'я та номер телефону.",
+      successTitle: "Дякуємо!",
+      successText: "Замовлення сформовано. Менеджер NATA Clean зв'яжеться з вами щодо оплати та доставки.",
+      backShop: "Повернутися до магазину",
+      deliveryInfo: "Доставка у Варшаві та по всій Польщі. Деталі та вартість доставки підтвердить менеджер.",
+      paymentInfo: "Оплата узгоджується з менеджером після підтвердження замовлення.",
+      companyInfo: "NATA GROUP — виробник професійної побутової хімії NATA Clean.",
+      added: "Додано до кошика"
+    },
 
-      document.getElementById("heroText").innerText =
-        t.hero;
+    ru: {
+      hero: "Профессиональная бытовая химия для дома и бизнеса",
+      products: "Товары",
+      productsSub: "4 профессиональных средства NATA Clean",
+      from: "от",
+      currency: "грн",
+      priceUnknown: "Цена уточняется",
+      back: "Назад",
+      volume: "Выберите объём",
+      quantity: "Количество",
+      add: "Добавить в корзину",
+      priceNote: "Цена согласно актуальному предложению NATA GROUP",
+      cart: "Корзина",
+      empty: "Ваша корзина пуста",
+      total: "Итого",
+      checkout: "Оформить заказ",
+      unknownWarning: "В корзине есть вариант без подтверждённой цены. Менеджер подтвердит её перед оплатой.",
+      home: "Главная",
+      catalog: "Каталог",
+      more: "Ещё",
+      changeLanguage: "Изменить язык",
+      delivery: "Доставка",
+      payment: "Оплата",
+      company: "О NATA GROUP",
+      checkoutBack: "Назад в корзину",
+      checkoutTitle: "Оформить заказ",
+      checkoutInfo: "После оформления менеджер свяжется с вами для подтверждения доставки и оплаты.",
+      name: "Имя",
+      phone: "Телефон",
+      city: "Город",
+      deliveryMethod: "Способ доставки",
+      address: "Адрес / данные для отправки",
+      comment: "Комментарий",
+      confirm: "Подтвердить заказ",
+      deliveryWarsaw: "Доставка по Варшаве",
+      deliveryPoland: "Доставка по Польше",
+      required: "Укажите имя и номер телефона.",
+      successTitle: "Спасибо!",
+      successText: "Заказ сформирован. Менеджер NATA Clean свяжется с вами по поводу оплаты и доставки.",
+      backShop: "Вернуться в магазин",
+      deliveryInfo: "Доставка по Варшаве и всей Польше. Детали и стоимость доставки подтвердит менеджер.",
+      paymentInfo: "Оплата согласовывается с менеджером после подтверждения заказа.",
+      companyInfo: "NATA GROUP — производитель профессиональной бытовой химии NATA Clean.",
+      added: "Добавлено в корзину"
+    }
+  };
 
+  function setLanguage(lang) {
+    language = lang;
+    localStorage.setItem("nataLanguage", lang);
+    document.getElementById("languageScreen").style.display = "none";
+    translateUI();
+    renderProducts();
+    renderCart();
+  }
 
-      document.getElementById("categoriesTitle").innerText =
-        t.categories;
+  function changeLanguage() {
+    document.getElementById("languageScreen").style.display = "flex";
+  }
 
+  function translateUI() {
+    const x = t[language];
 
-      document.getElementById("catKitchen").innerText =
-        t.kitchen;
+    document.documentElement.lang = language === "ua" ? "uk" : language;
 
+    document.getElementById("heroText").textContent = x.hero;
+    document.getElementById("productsTitle").textContent = x.products;
+    document.getElementById("productsSubtitle").textContent = x.productsSub;
 
-      document.getElementById("catBathroom").innerText =
-        t.bathroom;
+    document.getElementById("backText").textContent = x.back;
+    document.getElementById("volumeLabel").textContent = x.volume;
+    document.getElementById("quantityLabel").textContent = x.quantity;
+    document.getElementById("addCartButton").textContent = x.add;
+    document.getElementById("priceNote").textContent = x.priceNote;
 
+    document.getElementById("cartTitle").textContent = x.cart;
 
-      document.getElementById("catToilet").innerText =
-        t.toilet;
+    document.getElementById("moreTitle").textContent = x.more;
+    document.getElementById("changeLanguageText").textContent = x.changeLanguage;
+    document.getElementById("deliveryText").textContent = x.delivery;
+    document.getElementById("paymentText").textContent = x.payment;
+    document.getElementById("companyText").textContent = x.company;
 
+    document.getElementById("navHomeText").textContent = x.home;
+    document.getElementById("navCatalogText").textContent = x.catalog;
+    document.getElementById("navCartText").textContent = x.cart;
+    document.getElementById("navMoreText").textContent = x.more;
 
-      document.getElementById("catGlass").innerText =
-        t.glass;
+    document.getElementById("checkoutBackText").textContent = x.checkoutBack;
+    document.getElementById("checkoutTitle").textContent = x.checkoutTitle;
+    document.getElementById("checkoutInfo").textContent = x.checkoutInfo;
+    document.getElementById("nameLabel").textContent = x.name;
+    document.getElementById("phoneLabel").textContent = x.phone;
+    document.getElementById("cityLabel").textContent = x.city;
+    document.getElementById("deliveryLabel").textContent = x.deliveryMethod;
+    document.getElementById("addressLabel").textContent = x.address;
+    document.getElementById("commentLabel").textContent = x.comment;
+    document.getElementById("confirmOrderButton").textContent = x.confirm;
 
+    document.getElementById("deliveryMethod").innerHTML = `
+      <option value="warsaw">${x.deliveryWarsaw}</option>
+      <option value="poland">${x.deliveryPoland}</option>
+    `;
 
-      document.getElementById("catFloor").innerText =
-        t.floor;
+    document.getElementById("successTitle").textContent = x.successTitle;
+    document.getElementById("successText").textContent = x.successText;
+    document.getElementById("successHomeButton").textContent = x.backShop;
+  }
 
+  function lowestKnownPrice(product) {
+    const prices = Object.values(product.prices).filter(v => typeof v === "number");
+    return prices.length ? Math.min(...prices) : null;
+  }
 
-      document.getElementById("catUniversal").innerText =
-        t.universal;
+  function renderProducts() {
+    const grid = document.getElementById("productGrid");
+    const x = t[language];
 
+    grid.innerHTML = products.map(product => {
+      const minPrice = lowestKnownPrice(product);
 
-      document.getElementById("catDishes").innerText =
-        t.dishes;
+      return `
+        <div class="product-card" onclick="openProduct('${product.id}')">
+          <div class="product-icon">${product.icon}</div>
+          <div class="product-name">${product.name[language]}</div>
+          <div class="product-short">${product.short[language]}</div>
+          <div class="from-price">
+            ${minPrice !== null ? `${x.from} ${minPrice} ${x.currency}` : x.priceUnknown}
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
 
+  function openProduct(id) {
+    currentProductId = id;
+    currentVolume = "0.5";
+    currentQty = 1;
 
-      document.getElementById("catLaundry").innerText =
-        t.laundry;
+    const product = products.find(p => p.id === id);
 
+    document.getElementById("detailIcon").textContent = product.icon;
+    document.getElementById("detailTitle").textContent = product.name[language];
+    document.getElementById("detailDescription").textContent = product.description[language];
+    document.getElementById("productQty").textContent = currentQty;
 
-      document.getElementById("catSoftener").innerText =
-        t.softener;
+    renderVolumeOptions();
+    updateDetailPrice();
 
+    showPage("product");
+  }
 
-      document.getElementById("popularTitle").innerText =
-        t.popular;
+  function renderVolumeOptions() {
+    const container = document.getElementById("volumeOptions");
+    const volumes = ["0.5", "1", "5"];
 
+    container.innerHTML = volumes.map(volume => `
+      <button
+        class="volume-btn ${volume === currentVolume ? "selected" : ""}"
+        onclick="selectVolume('${volume}')">
+        ${volume.replace(".", ",")} L
+      </button>
+    `).join("");
+  }
 
-      document.getElementById("navHome").innerText =
-        t.home;
+  function selectVolume(volume) {
+    currentVolume = volume;
+    renderVolumeOptions();
+    updateDetailPrice();
+  }
 
+  function updateDetailPrice() {
+    const product = products.find(p => p.id === currentProductId);
+    const price = product.prices[currentVolume];
+    const x = t[language];
 
-      document.getElementById("navCatalog").innerText =
-        t.catalog;
+    document.getElementById("detailPrice").textContent =
+      price === null ? x.priceUnknown : `${price} ${x.currency}`;
+  }
 
+  function changeProductQty(change) {
+    currentQty += change;
 
-      document.getElementById("navCart").innerText =
-        t.cart;
-
-
-      document.getElementById("navMore").innerText =
-        t.more;
-
-
-      document.getElementById("languageScreen").style.display =
-        "none";
-
-
-      localStorage.setItem(
-        "nataLanguage",
-        lang
-      );
-
+    if (currentQty < 1) {
+      currentQty = 1;
     }
 
-  </script>
+    document.getElementById("productQty").textContent = currentQty;
+  }
+
+  function addToCart() {
+    const product = products.find(p => p.id === currentProductId);
+    const existing = cart.find(
+      item => item.productId === currentProductId && item.volume === currentVolume
+    );
+
+    if (existing) {
+      existing.qty += currentQty;
+    } else {
+      cart.push({
+        productId: currentProductId,
+        volume: currentVolume,
+        qty: currentQty,
+        price: product.prices[currentVolume]
+      });
+    }
+
+    saveCart();
+
+    if (window.Telegram && Telegram.WebApp && Telegram.WebApp.HapticFeedback) {
+      Telegram.WebApp.HapticFeedback.notificationOccurred("success");
+    }
+
+    alert(t[language].added);
+  }
+
+  function saveCart() {
+    localStorage.setItem("nataCart", JSON.stringify(cart));
+    updateCartBadge();
+    renderCart();
+  }
+
+  function updateCartBadge() {
+    const count = cart.reduce((sum, item) => sum + item.qty, 0);
+    const badge = document.getElementById("cartBadge");
+
+    badge.textContent = count;
+    badge.style.display = count > 0 ? "flex" : "none";
+  }
+
+  function removeCartItem(index) {
+    cart.splice(index, 1);
+    saveCart();
+  }
+
+  function renderCart() {
+    const content = document.getElementById("cartContent");
+    const x = t[language];
+
+    if (!cart.length) {
+      content.innerHTML = `
+        <div class="cart-empty">
+          <div class="cart-empty-icon">🛒</div>
+          <div>${x.empty}</div>
+        </div>
+      `;
+
+      updateCartBadge();
+      return;
+    }
+
+    let total = 0;
+    let hasUnknown = false;
+
+    const itemsHTML = cart.map((item, index) => {
+      const product = products.find(p => p.id === item.productId);
+
+      let linePrice = null;
+
+      if (typeof item.price === "number") {
+        linePrice = item.price * item.qty;
+        total += linePrice;
+      } else {
+        hasUnknown = true;
+      }
+
+      return `
+        <div class="cart-item">
+          <div class="cart-item-icon">${product.icon}</div>
+
+          <div class="cart-item-main">
+            <div class="cart-item-name">${product.name[language]}</div>
+            <div class="cart-item-meta">
+              ${item.volume.replace(".", ",")} L × ${item.qty}
+            </div>
+            <div class="cart-item-price">
+              ${linePrice === null ? x.priceUnknown : `${linePrice} ${x.currency}`}
+            </div>
+          </div>
+
+          <button class="remove-btn" onclick="removeCartItem(${index})">×</button>
+        </div>
+      `;
+    }).join("");
+
+    content.innerHTML = `
+      ${itemsHTML}
+
+      <div class="cart-total">
+
+        ${hasUnknown ? `
+          <div class="unpriced-warning">${x.unknownWarning}</div>
+        ` : ""}
+
+        <div class="total-row">
+          <span>${x.total}</span>
+          <span>${total} ${x.currency}${hasUnknown ? " +" : ""}</span>
+        </div>
+
+        <button class="primary-btn" onclick="showPage('checkout')">
+          ${x.checkout}
+        </button>
+      </div>
+    `;
+
+    updateCartBadge();
+  }
+
+  function showPage(page) {
+    document.querySelectorAll(".page").forEach(el => el.classList.remove("active"));
+
+    const map = {
+      home: "homePage",
+      product: "productPage",
+      cart: "cartPage",
+      more: "morePage",
+      checkout: "checkoutPage",
+      success: "successPage"
+    };
+
+    document.getElementById(map[page]).classList.add("active");
+
+    document.querySelectorAll(".nav-btn").forEach(btn => btn.classList.remove("active"));
+
+    if (page === "home") {
+      document.getElementById("navHome").classList.add("active");
+    }
+
+    if (page === "cart") {
+      document.getElementById("navCart").classList.add("active");
+      renderCart();
+    }
+
+    if (page === "more") {
+      document.getElementById("navMore").classList.add("active");
+    }
+
+    document.getElementById("bottomNav").style.display =
+      ["checkout", "success", "product"].includes(page) ? "none" : "grid";
+
+    window.scrollTo(0, 0);
+  }
+
+  function showInfo(type) {
+    const x = t[language];
+
+    if (type === "delivery") alert(x.deliveryInfo);
+    if (type === "payment") alert(x.paymentInfo);
+    if (type === "company") alert(x.companyInfo);
+  }
+
+  function submitOrder() {
+    const name = document.getElementById("customerName").value.trim();
+    const phone = document.getElementById("customerPhone").value.trim();
+
+    if (!name || !phone) {
+      alert(t[language].required);
+      return;
+    }
+
+    const order = {
+      name,
+      phone,
+      city: document.getElementById("customerCity").value.trim(),
+      delivery: document.getElementById("deliveryMethod").value,
+      address: document.getElementById("customerAddress").value.trim(),
+      comment: document.getElementById("customerComment").value.trim(),
+      items: cart,
+      language,
+      createdAt: new Date().toISOString()
+    };
+
+    /*
+      ВАЖНО:
+      На следующем этапе сюда подключим защищённую отправку заказа
+      менеджеру через Telegram.
+
+      Токен Telegram-бота НЕЛЬЗЯ помещать в этот публичный index.html.
+    */
+
+    localStorage.setItem("nataLastOrder", JSON.stringify(order));
+
+    showPage("success");
+  }
+
+  function finishOrder() {
+    cart = [];
+    saveCart();
+
+    document.getElementById("customerName").value = "";
+    document.getElementById("customerPhone").value = "";
+    document.getElementById("customerCity").value = "";
+    document.getElementById("customerAddress").value = "";
+    document.getElementById("customerComment").value = "";
+
+    showPage("home");
+  }
+
+  // INITIAL LOAD
+
+  translateUI();
+  renderProducts();
+  renderCart();
+  updateCartBadge();
+
+  // Показываем выбор языка при первом запуске.
+  // Если язык уже выбирали ранее — сразу открываем магазин.
+  if (localStorage.getItem("nataLanguage")) {
+    document.getElementById("languageScreen").style.display = "none";
+  }
+</script>
 
 </body>
 </html>
