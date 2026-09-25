@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NATA Clean Polska</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f6f7;
+      color: #17202a;
+    }
+
+    .app {
+      max-width: 500px;
+      margin: auto;
+      min-height: 100vh;
+      background: white;
+    }
+
+    .header {
+      background: #009b72;
+      color: white;
+      padding: 18px 20px;
+      text-align: center;
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #009b72, #007c5c);
+      color: white;
+      padding: 35px 24px;
+    }
+
+    .hero h1 {
+      font-size: 30px;
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      opacity: 0.9;
+      line-height: 1.5;
+    }
+
+    .section {
+      padding: 22px 18px;
+    }
+
+    .section h2 {
+      font-size: 22px;
+      margin-bottom: 18px;
+    }
+
+    .categories {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .category {
+      background: #f4f7f6;
+      border-radius: 16px;
+      padding: 18px 8px;
+      text-align: center;
+      cursor: pointer;
+      min-height: 105px;
+    }
+
+    .category span {
+      display: block;
+      font-size: 31px;
+      margin-bottom: 8px;
+    }
+
+    .category p {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .language-screen {
+      position: fixed;
+      inset: 0;
+      background: #009b72;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 25px;
+    }
+
+    .language-box {
+      width: 100%;
+      max-width: 420px;
+      text-align: center;
+    }
+
+    .brand {
+      font-size: 38px;
+      font-weight: 300;
+      margin-bottom: 15px;
+    }
+
+    .language-box h1 {
+      margin-bottom: 8px;
+    }
+
+    .language-box p {
+      margin-bottom: 30px;
+      opacity: 0.9;
+    }
+
+    .lang-button {
+      width: 100%;
+      background: white;
+      color: #17202a;
+      border: none;
+      padding: 17px;
+      margin: 7px 0;
+      border-radius: 14px;
+      font-size: 17px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .product {
+      display: flex;
+      align-items: center;
+      background: #f7f8f8;
+      border-radius: 15px;
+      padding: 14px;
+      margin-bottom: 12px;
+    }
+
+    .product-icon {
+      font-size: 40px;
+      width: 60px;
+      text-align: center;
+    }
+
+    .product-info {
+      flex: 1;
+    }
+
+    .product-info h3 {
+      font-size: 16px;
+      margin-bottom: 5px;
+    }
+
+    .product-info p {
+      font-size: 13px;
+      color: #6b7378;
+    }
+
+    .price {
+      font-weight: bold;
+      color: #009b72;
+      margin-top: 6px;
+    }
+
+    .cart-button {
+      border: none;
+      background: #009b72;
+      color: white;
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 20px;
+    }
+
+    .bottom-space {
+      height: 80px;
+    }
+
+    .navigation {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      max-width: 500px;
+      width: 100%;
+      background: white;
+      border-top: 1px solid #e5e5e5;
+      display: flex;
+      justify-content: space-around;
+      padding: 11px 5px 15px;
+    }
+
+    .nav-item {
+      text-align: center;
+      font-size: 11px;
+      color: #596167;
+    }
+
+    .nav-icon {
+      font-size: 22px;
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .active {
+      color: #009b72;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ВЫБОР ЯЗЫКА -->
+
+  <div class="language-screen" id="languageScreen">
+
+    <div class="language-box">
+
+      <div class="brand">nata group</div>
+
+      <h1>Witamy w NATA Clean!</h1>
+
+      <p>
+        Profesjonalna chemia gospodarcza dla domu i biznesu
+      </p>
+
+      <button class="lang-button" onclick="chooseLanguage('pl')">
+        🇵🇱 Polski
+      </button>
+
+      <button class="lang-button" onclick="chooseLanguage('ua')">
+        🇺🇦 Українська
+      </button>
+
+      <button class="lang-button" onclick="chooseLanguage('ru')">
+        🇷🇺 Русский
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <!-- ПРИЛОЖЕНИЕ -->
+
+  <div class="app">
+
+    <div class="header">
+      NATA GROUP
+    </div>
+
+
+    <!-- ГЛАВНЫЙ БАННЕР -->
+
+    <div class="hero">
+
+      <h1>NATA Clean</h1>
+
+      <p id="heroText">
+        Profesjonalne środki czystości dla domu i biznesu
+      </p>
+
+    </div>
+
+
+    <!-- КАТЕГОРИИ -->
+
+    <div class="section">
+
+      <h2 id="categoriesTitle">
+        Kategorie
+      </h2>
+
+      <div class="categories">
+
+        <div class="category">
+          <span>🍳</span>
+          <p id="catKitchen">
+            Kuchnia i tłuszcz
+          </p>
+        </div>
+
+
+        <div class="category">
+          <span>🚿</span>
+          <p id="catBathroom">
+            Łazienka
+          </p>
+        </div>
+
+
+        <div class="category">
+          <span>🚽</span>
+          <p id="catToilet">
+            Toaleta
+          </p>
+        </div>
+
+
+        <div class="category">
+          <span>🪟</span>
+          <p id="catGlass">
+            Szkło i lustra
+          </p>
+        </div>
+
+
+        <div class="category">
+          <span>🧹</span>
+          <p id="catFloor">
+            Podłogi
+          </p>
+        </div>
+
+
+        <div class="category">
+          <span>✨</span>
+          <p id="catUniversal">
+            Uniwersalne
+          </p>
+        </div>
+
+
+        <div class="category">
+          <span>🍽️</span>
+          <p id="catDishes">
+            Naczynia
+          </p>
+        </div>
+
+
+        <div class="category">
+          <span>🧺</span>
+          <p id="catLaundry">
+            Pranie
+          </p>
+        </div>
+
+
+        <div class="category">
+          <span>🌸</span>
+          <p id="catSoftener">
+            Kondycjonery
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ПОПУЛЯРНЫЕ ТОВАРЫ -->
+
+    <div class="section">
+
+      <h2 id="popularTitle">
+        Popularne produkty
+      </h2>
+
+
+      <div class="product">
+
+        <div class="product-icon">
+          🧴
+        </div>
+
+        <div class="product-info">
+
+          <h3>
+            NATA Clean Kitchen
+          </h3>
+
+          <p>
+            Środek do usuwania tłuszczu
+          </p>
+
+          <div class="price">
+            12,90 zł
+          </div>
+
+        </div>
+
+        <button class="cart-button">
+          +
+        </button>
+
+      </div>
+
+
+      <div class="product">
+
+        <div class="product-icon">
+          🧴
+        </div>
+
+        <div class="product-info">
+
+          <h3>
+            NATA Clean Bathroom
+          </h3>
+
+          <p>
+            Środek do łazienki
+          </p>
+
+          <div class="price">
+            11,90 zł
+          </div>
+
+        </div>
+
+        <button class="cart-button">
+          +
+        </button>
+
+      </div>
+
+
+      <div class="product">
+
+        <div class="product-icon">
+          🧴
+        </div>
+
+        <div class="product-info">
+
+          <h3>
+            NATA Clean Glass
+          </h3>
+
+          <p>
+            Płyn do szyb i luster
+          </p>
+
+          <div class="price">
+            9,90 zł
+          </div>
+
+        </div>
+
+        <button class="cart-button">
+          +
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div class="bottom-space"></div>
+
+  </div>
+
+
+  <!-- НИЖНЕЕ МЕНЮ -->
+
+  <div class="navigation">
+
+    <div class="nav-item active">
+
+      <span class="nav-icon">
+        🏠
+      </span>
+
+      <span id="navHome">
+        Główna
+      </span>
+
+    </div>
+
+
+    <div class="nav-item">
+
+      <span class="nav-icon">
+        ▦
+      </span>
+
+      <span id="navCatalog">
+        Katalog
+      </span>
+
+    </div>
+
+
+    <div class="nav-item">
+
+      <span class="nav-icon">
+        🛒
+      </span>
+
+      <span id="navCart">
+        Koszyk
+      </span>
+
+    </div>
+
+
+    <div class="nav-item">
+
+      <span class="nav-icon">
+        •••
+      </span>
+
+      <span id="navMore">
+        Więcej
+      </span>
+
+    </div>
+
+  </div>
+
+
+  <script>
+
+    const translations = {
+
+      pl: {
+
+        hero:
+          "Profesjonalne środki czystości dla domu i biznesu",
+
+        categories:
+          "Kategorie",
+
+        kitchen:
+          "Kuchnia i tłuszcz",
+
+        bathroom:
+          "Łazienka",
+
+        toilet:
+          "Toaleta",
+
+        glass:
+          "Szkło i lustra",
+
+        floor:
+          "Podłogi",
+
+        universal:
+          "Uniwersalne",
+
+        dishes:
+          "Naczynia",
+
+        laundry:
+          "Pranie",
+
+        softener:
+          "Kondycjonery",
+
+        popular:
+          "Popularne produkty",
+
+        home:
+          "Główna",
+
+        catalog:
+          "Katalog",
+
+        cart:
+          "Koszyk",
+
+        more:
+          "Więcej"
+      },
+
+
+      ua: {
+
+        hero:
+          "Професійна побутова хімія для дому та бізнесу",
+
+        categories:
+          "Категорії",
+
+        kitchen:
+          "Кухня та жир",
+
+        bathroom:
+          "Ванна кімната",
+
+        toilet:
+          "Туалет",
+
+        glass:
+          "Скло та дзеркала",
+
+        floor:
+          "Підлога",
+
+        universal:
+          "Універсальні",
+
+        dishes:
+          "Посуд",
+
+        laundry:
+          "Прання",
+
+        softener:
+          "Кондиціонери",
+
+        popular:
+          "Популярні товари",
+
+        home:
+          "Головна",
+
+        catalog:
+          "Каталог",
+
+        cart:
+          "Кошик",
+
+        more:
+          "Більше"
+      },
+
+
+      ru: {
+
+        hero:
+          "Профессиональная бытовая химия для дома и бизнеса",
+
+        categories:
+          "Категории",
+
+        kitchen:
+          "Кухня и жир",
+
+        bathroom:
+          "Ванная",
+
+        toilet:
+          "Туалет",
+
+        glass:
+          "Стекло и зеркала",
+
+        floor:
+          "Полы",
+
+        universal:
+          "Универсальные",
+
+        dishes:
+          "Посуда",
+
+        laundry:
+          "Стирка",
+
+        softener:
+          "Кондиционеры",
+
+        popular:
+          "Популярные товары",
+
+        home:
+          "Главная",
+
+        catalog:
+          "Каталог",
+
+        cart:
+          "Корзина",
+
+        more:
+          "Еще"
+      }
+
+    };
+
+
+    function chooseLanguage(lang) {
+
+      const t = translations[lang];
+
+
+      document.getElementById("heroText").innerText =
+        t.hero;
+
+
+      document.getElementById("categoriesTitle").innerText =
+        t.categories;
+
+
+      document.getElementById("catKitchen").innerText =
+        t.kitchen;
+
+
+      document.getElementById("catBathroom").innerText =
+        t.bathroom;
+
+
+      document.getElementById("catToilet").innerText =
+        t.toilet;
+
+
+      document.getElementById("catGlass").innerText =
+        t.glass;
+
+
+      document.getElementById("catFloor").innerText =
+        t.floor;
+
+
+      document.getElementById("catUniversal").innerText =
+        t.universal;
+
+
+      document.getElementById("catDishes").innerText =
+        t.dishes;
+
+
+      document.getElementById("catLaundry").innerText =
+        t.laundry;
+
+
+      document.getElementById("catSoftener").innerText =
+        t.softener;
+
+
+      document.getElementById("popularTitle").innerText =
+        t.popular;
+
+
+      document.getElementById("navHome").innerText =
+        t.home;
+
+
+      document.getElementById("navCatalog").innerText =
+        t.catalog;
+
+
+      document.getElementById("navCart").innerText =
+        t.cart;
+
+
+      document.getElementById("navMore").innerText =
+        t.more;
+
+
+      document.getElementById("languageScreen").style.display =
+        "none";
+
+
+      localStorage.setItem(
+        "nataLanguage",
+        lang
+      );
+
+    }
+
+  </script>
+
+</body>
+</html>
