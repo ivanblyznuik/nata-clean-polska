@@ -418,8 +418,8 @@ function render(){
    <div class="card">
 
      <div class="icon">
-       ${product.icon}
-     </div>
+  ${product.image ? `<img src="${product.image}" style="width:100%;height:180px;object-fit:contain;">` : product.icon}
+</div>
 
      <h3>
        ${product[lang]}
